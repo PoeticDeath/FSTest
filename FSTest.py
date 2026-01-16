@@ -52,6 +52,6 @@ for i in os.listdir("FSTest/"):
         if c != data:
             print(f"Error on file: {i}   ")
     if int(i, 16) % 100 == 0:
-        print(f"Double Checking: {int(i, 16)}   ", end="\r")
+        print(f"Double Checking: {int(i, 16) + 1}   ", end="\r")
 print(f"Double Checking: {int(i, 16) + 1}   ")
 shutil.rmtree("FSTest")
