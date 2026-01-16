@@ -39,12 +39,13 @@ try:
         if i % 100 == 0:
             print(f"Create Time: {totcre:.2f} {totcre/(i+1):.5f}, Read Time: {totread:.2f} {totread/(i+1):.5f}, Allocation Time: {totalloc-totwrite:.2f} {(totalloc-totwrite)/(i+1):.5f}, Write Time: {totwrite:.2f} {totwrite/(i+1):.5f}, Files: {i + 1}   ", end="\r")
         i += 1
-except Exception as e:
+except (Exception,KeyboardInterrupt) as e:
     print(e)
     print(f"Create Time: {totcre:.2f} {totcre/(i+1):.5f}, Read Time: {totread:.2f} {totread/(i+1):.5f}, Allocation Time: {totalloc-totwrite:.2f} {(totalloc-totwrite)/(i+1):.5f}, Write Time: {totwrite:.2f} {totwrite/(i+1):.5f}, Files: {i + 1}   ")
 
 seed(0)
-for i in os.listdir("FSTest/"):
+for i in sorted([int(i, 16) for i in os.listdir("FSTest/")]):
+    i = hex(i)[2:]
     size = randint(1, 2097152)
     data = randbytes(size)
     if os.path.getsize("FSTest/" + i) == size:
