@@ -24,16 +24,19 @@ try:
         tmpalloc = time()
         c.write(bytes(size))
         c.flush()
+        os.fsync(c.fileno())
         totalloc += time() - tmpalloc
         c.seek(0)
         tmpwrite = time()
         c.write(data)
         c.flush()
+        os.fsync(c.fileno())
         totwrite += time() - tmpwrite
         c.seek(0)
         tmpread = time()
         d = c.read()
         totread += time() - tmpread
+        c.close()
         if d != data:
             print(f"Error on file: {hex(i)[2:]}   ")
         if i % 100 == 0:
@@ -49,8 +52,10 @@ for i in sorted([int(i, 16) for i in os.listdir("FSTest/")]):
     size = randint(1, 2097152)
     data = randbytes(size)
     if os.path.getsize("FSTest/" + i) == size:
-        c = open("FSTest/" + i, "rb").read()
-        if c != data:
+        c = open("FSTest/" + i, "rb")
+        d = c.read()
+        c.close()
+        if d != data:
             print(f"Error on file: {i}   ")
     if int(i, 16) % 100 == 0:
         print(f"Double Checking: {int(i, 16) + 1}   ", end="\r")
