@@ -4,7 +4,7 @@ from time import time
 from random import seed, randint, randbytes
 
 path = input("Full Test Path: ")
-if not path.startswith("/"):
+if not path.startswith("/") and os.name != "nt":
     print("Must be full path.")
     exit()
 
@@ -62,12 +62,15 @@ for i in sorted([int(i, 16) for i in os.listdir(path + "/FSTest/")]):
     i = hex(i)[2:]
     size = randint(1, 2097152)
     data = randbytes(size)
-    if os.path.getsize(path + "/FSTest/" + i) == size:
+    cursize = os.path.getsize(path + "/FSTest/" + i)
+    if cursize == size:
         c = open(path + "/FSTest/" + i, "rb")
         d = c.read()
         c.close()
         if d != data:
             print(f"Error on file: {i}   ")
+    else:
+        print(f"Error on file: {i} {cursize} {size}   ")
     if int(i, 16) % 100 == 0:
         print(f"Double Checking: {int(i, 16) + 1}   ", end="\r")
 print(f"Double Checking: {int(i, 16) + 1}   ")
